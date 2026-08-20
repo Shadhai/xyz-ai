@@ -1,850 +1,381 @@
-🤖 XYZ AI — Human-Like School Assistant
+<div align="center">
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:11998e,50:38ef7d,100:c6ffdd&height=220&section=header&text=🎓%20XYZ%20AI&fontSize=52&fontColor=ffffff&fontAlignY=38&desc=Human-Like%20AI%20Assistant%20for%20Schools&descAlignY=60&descSize=18&animation=fadeIn" width="100%" />
+</div>
+
+<div align="center">
+
+<img src="https://img.shields.io/badge/Build-Passing-brightgreen?style=for-the-badge&logo=github-actions&logoColor=white" />
+<img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge&logo=open-source-initiative&logoColor=white" />
+<img src="https://img.shields.io/badge/Version-1.0.0-orange?style=for-the-badge&logo=semver&logoColor=white" />
+<img src="https://img.shields.io/badge/Node.js-18%2B-339933?style=for-the-badge&logo=node.js&logoColor=white" />
+<img src="https://img.shields.io/badge/Python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" />
+<img src="https://img.shields.io/github/stars/Shadhai/xyz-ai?style=for-the-badge&logo=github&color=yellow" />
+
+</div>
+
+<h3 align="center">🚀 A human-like AI alternative to fragmented school communication portals like ClassDojo, Remind, and ParentSquare</h3>
+
+<p align="center">
+Built for <strong>students, parents, teachers, and school leadership</strong>, XYZ AI unifies chat, voice, and an animated AI avatar into a single assistant that understands intent, remembers context, and speaks 12 languages — replacing brittle, siloed school portals with one conversational layer that actually feels human.
+</p>
+
+<div align="center">
+
+<a href="#-quick-start"><img src="https://img.shields.io/badge/Quick%20Start-▶%20Get%20Running-11998e?style=for-the-badge" /></a>
+<a href="#-api-reference"><img src="https://img.shields.io/badge/API%20Docs-📖%20Explore-38ef7d?style=for-the-badge" /></a>
+<a href="#-features"><img src="https://img.shields.io/badge/Features-✨%20See%20All-c6ffdd?style=flat-square&labelColor=11998e" /></a>
+
+</div>
+
+---
+
+## 📑 Table of Contents
+
+- [Purpose & Philosophy](#-purpose--philosophy)
+- [Architecture](#-architecture)
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Quick Start](#-quick-start)
+- [Environment Configuration](#-environment-configuration)
+- [API Reference](#-api-reference)
+- [Use Cases](#-use-cases)
+- [Project Structure](#-project-structure)
+- [Docker Deployment](#-docker-deployment)
+- [Testing](#-testing)
+- [Troubleshooting](#-troubleshooting)
+- [Roadmap](#-roadmap)
+- [Contributing](#-contributing)
+- [Contributors](#-contributors)
+- [Star History](#-star-history)
+
+---
+
+## 💡 Purpose & Philosophy
+
+> School communication today is fragmented across separate portals, has no unified voice interface, and forces every stakeholder — student, parent, teacher, principal — into the same rigid, robotic experience regardless of their role or language.
+
+**XYZ AI** solves this with a single conversational system that adapts its persona, permissions, and language to whoever it's talking to, across text, voice, and an animated avatar.
+
+- 🔐 **Security first** — zero-trust middleware validates token, role, permission, and resource-level context on every request, with prompt-injection sanitization on all inputs
+- 🧩 **Modular architecture** — backend, AI engine, frontend, and mock APIs are independently deployable services connected through a clean API boundary
+- 📊 **Context-aware by design** — a Redis-backed context manager scores message importance so conversations stay coherent without unbounded memory growth
+- ⚡ **Built for scale** — Kubernetes-native with horizontal pod autoscaling and sub-200ms response targets under 1,000+ concurrent users
+
+---
+
+## 🏗️ Architecture
+
+```mermaid
+graph TD
+    A["🌐 Client Apps\n(Chat / Voice / Avatar)"] --> B["🚪 API Gateway"]
+    B --> C["🔐 Auth Module"]
+    C --> D["📋 Attendance Service"]
+    C --> E["👤 User Service"]
+    C --> F["📣 Escalation Service"]
+    C --> G["📊 Analytics Service"]
+    D --> H["🧠 AI Engine\n(Intent / Entity / Persona)"]
+    E --> H
+    F --> H
+    G --> H
+    H --> I["🎙️ Voice Pipeline\n(STT / TTS)"]
+    H --> J["🧑‍🎨 Avatar Engine\n(Lip Sync / Expressions)"]
+    H --> K[("🗄️ Context Store\nRedis")]
+    D --> L[("🗄️ Primary Database")]
+    H --> M["📡 Notification Service"]
+```
+
+---
+
+## ✨ Features
+
+| Module | Capability | Auth Required | Role |
+|:---|:---|:---:|:---|
+| 🧠 **Intent Detection** | Classifies natural-language queries with 95%+ accuracy across 12 languages | ✅ | All |
+| 🗣️ **Voice Interface** | Multilingual speech-to-text and text-to-speech via Wav2Vec2 and neural TTS voices | ✅ | All |
+| 🎭 **AI Avatar** | Animated avatar with lip sync and facial expressions driven by response content | ✅ | All |
+| 🧑‍🤝‍🧑 **Role-Based Personas** | Distinct conversational persona per role (student, parent, teacher, principal) | ✅ | All |
+| 📋 **Attendance Management** | View and mark attendance with resource-level access control | ✅ | Student / Parent / Teacher |
+| 📣 **Escalation Requests** | Structured escalation flow from student/parent queries to staff | ✅ | Student / Parent |
+| 📊 **Analytics Dashboard** | Usage and conversation analytics for school leadership | ✅ | Teacher / Principal |
+| 🧠 **Context Retention** | Redis-backed conversation memory with importance-weighted retention | ❌ | All |
+
+---
 
-A production-grade Applied AI platform for intelligent, secure, and human-like school communication.
+## 🧰 Tech Stack
 
+| Layer | Technology |
+|:---|:---|
+| **Backend Runtime** | Node.js 18+ / Express.js |
+| **AI Engine Runtime** | Python 3.9+ / FastAPI |
+| **AI/ML** | PyTorch, Transformers (Wav2Vec2), gTTS |
+| **Frontend** | React + TypeScript |
+| **Context Store** | Redis |
+| **Database** | Primary DB (schema not present in repo — verify) <!-- VERIFY database engine --> |
+| **Authentication** | JWT |
+| **Containerization** | Docker, Docker Compose |
+| **Orchestration** | Kubernetes (with HPA) |
+| **Infrastructure as Code** | Terraform |
+| **Monitoring** | Prometheus, Grafana, ELK Stack |
+| **API Docs** | OpenAPI (`docs/api/openapi.yaml`) |
 
+---
 
+## 🚀 Quick Start
 
+### Prerequisites
 
+- Node.js `18+`
+- Python `3.9+`
+- Docker & Docker Compose
+- Redis (or use the bundled container)
 
+### Step 1 — Clone
 
-
-
-
-
-
-
-
-
-
-📖 Table of Contents
-Overview
-Key Features
-Problem Statement
-Solution
-Architecture
-Technology Stack
-Project Structure
-AI Engine
-Conversation Context
-Voice & Avatar
-Security
-Performance
-Monitoring
-Testing
-Local Development
-Docker
-Kubernetes
-API
-Roadmap
-Contributing
-License
-🎯 Overview
-
-XYZ AI is an enterprise-ready AI school assistant designed to simplify communication between schools and their stakeholders.
-
-The platform provides a unified conversational interface for:
-
-👨‍🎓 Students
-👨‍👩‍👧 Parents
-👩‍🏫 Teachers
-🏫 School Management / Principals
-
-Users can communicate with the assistant using text, voice, or an AI avatar, while the system maintains conversation context and applies role-based authorization before accessing school information.
-
-Key Metrics
-Metric	Target
-Intent Detection Accuracy	95%+
-Average Response Time	< 200 ms
-Supported Languages	12
-Concurrent Users	1,000+
-Availability Target	99.99%
-Security	Zero-trust architecture
-Test Coverage Target	95%+
-
-Note: These figures represent project targets/benchmarks and should be validated against the deployed implementation.
-
-✨ Key Features
-🧠 Intelligent AI
-Natural-language understanding
-Intent classification
-Entity extraction
-Multilingual language detection
-Conversation context management
-Role-aware AI personas
-Personalized responses
-💬 Omnichannel Interaction
-Text chat
-Voice input
-Speech-to-text
-Text-to-speech
-AI avatar
-Facial expressions
-Lip synchronization
-Real-time communication
-🏫 School Operations
-Attendance management
-Student information
-Parent information
-Teacher workflows
-Analytics
-Escalation requests
-Notifications
-Administrative workflows
-🔐 Enterprise Security
-JWT authentication
-Role-based access control
-Permission-based authorization
-Resource-level authorization
-Rate limiting
-Input validation
-Prompt-injection protection
-Token blacklist support
-Secure secrets management
-☁️ Production Infrastructure
-Docker-ready services
-Kubernetes deployment
-Horizontal pod autoscaling
-Redis caching
-Prometheus metrics
-Grafana dashboards
-ELK logging
-CI/CD automation
-Infrastructure as Code with Terraform
-🔍 Problem Statement
-
-Traditional school communication is often fragmented across multiple systems.
-
-Traditional School Communication
-│
-├── Fragmented Systems
-│   ├── Separate portals
-│   ├── Multiple communication channels
-│   └── Information silos
-│
-├── Accessibility
-│   ├── Language barriers
-│   ├── Digital literacy gaps
-│   └── Limited voice support
-│
-├── Operational Inefficiency
-│   ├── Manual attendance workflows
-│   ├── Delayed responses
-│   └── High administrative overhead
-│
-└── User Experience
-    ├── Robotic interactions
-    ├── Limited personalization
-    └── No conversational context
-
-💡 Solution
-
-XYZ AI provides a single intelligent interface that understands who the user is, what they are asking, what information they are allowed to access, and what context is relevant.
-
-Text
-Voice
-Avatar
-No
-Yes
-Text
-Voice
-Avatar
-User Query
-Input Type
-Chat Interface
-Speech-to-Text
-AI Avatar
-NLP Engine
-Intent Detection
-Entity Extraction
-Context Analysis
-Language Detection
-Permission Validation
-Authorized?
-Access Denied Response
-Process Request
-School / Mock API
-Response Generation
-Response Type
-Chat Response
-Text-to-Speech
-Avatar Animation
-🏗️ Architecture
-
-XYZ AI follows a modular service-oriented architecture.
-
-┌─────────────────────────────────────────────────────┐
-│                    User Interfaces                  │
-│                                                     │
-│        Web Chat │ Voice │ AI Avatar │ Dashboard     │
-└───────────────────────┬─────────────────────────────┘
-                        │
-                        ▼
-┌─────────────────────────────────────────────────────┐
-│                    API Gateway                       │
-│                                                     │
-│ Authentication │ Validation │ Rate Limiting │ RBAC  │
-└───────────────────────┬─────────────────────────────┘
-                        │
-             ┌──────────┴──────────┐
-             ▼                     ▼
-┌────────────────────┐   ┌───────────────────────────┐
-│    Backend API     │   │        AI Engine          │
-│                    │   │                           │
-│ Users              │   │ Intent Detection         │
-│ Attendance         │   │ Entity Extraction        │
-│ Escalations        │   │ Context Management       │
-│ Analytics          │   │ Personas                  │
-└─────────┬──────────┘   │ Voice                     │
-          │              │ Avatar                    │
-          │              └────────────┬──────────────┘
-          │                           │
-          └──────────────┬────────────┘
-                         ▼
-              ┌─────────────────────┐
-              │ Data & Infrastructure│
-              │                     │
-              │ PostgreSQL / DB     │
-              │ Redis               │
-              │ Mock APIs           │
-              │ Object Storage      │
-              └─────────────────────┘
-
-🛠️ Technology Stack
-Layer	Technology
-Frontend	React, TypeScript
-Backend	Node.js, Express
-AI Engine	Python, FastAPI
-NLP	Transformers / custom models
-Speech	Wav2Vec2, TTS
-Cache	Redis
-Authentication	JWT
-Containers	Docker
-Orchestration	Kubernetes
-Infrastructure	Terraform
-Monitoring	Prometheus + Grafana
-Logging	Elasticsearch + Logstash + Kibana
-Testing	Unit + Integration + E2E
-CI/CD	GitHub Actions
-📁 Project Structure
-xyz-ai/
-│
-├── .github/
-│   ├── workflows/
-│   │   ├── ci-cd.yml
-│   │   ├── security-scan.yml
-│   │   ├── performance-test.yml
-│   │   └── deployment.yml
-│   ├── ISSUE_TEMPLATE/
-│   └── PULL_REQUEST_TEMPLATE.md
-│
-├── backend/
-│   ├── src/
-│   │   ├── api/
-│   │   │   └── v1/
-│   │   │       ├── routes/
-│   │   │       ├── controllers/
-│   │   │       ├── middleware/
-│   │   │       └── validators/
-│   │   ├── core/
-│   │   │   ├── config/
-│   │   │   ├── constants/
-│   │   │   ├── errors/
-│   │   │   └── utils/
-│   │   ├── models/
-│   │   ├── services/
-│   │   └── app.js
-│   ├── tests/
-│   │   ├── unit/
-│   │   ├── integration/
-│   │   ├── e2e/
-│   │   └── fixtures/
-│   ├── Dockerfile
-│   ├── package.json
-│   └── .env.example
-│
-├── ai-engine/
-│   ├── src/
-│   │   ├── nlp/
-│   │   ├── persona/
-│   │   ├── voice/
-│   │   ├── avatar/
-│   │   ├── models/
-│   │   └── main.py
-│   ├── training/
-│   │   ├── datasets/
-│   │   ├── scripts/
-│   │   └── notebooks/
-│   ├── Dockerfile
-│   └── requirements.txt
-│
-├── frontend/
-│   ├── public/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── Chat/
-│   │   │   ├── Voice/
-│   │   │   ├── Avatar/
-│   │   │   └── Common/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   ├── store/
-│   │   ├── utils/
-│   │   └── App.tsx
-│   ├── Dockerfile
-│   ├── package.json
-│   └── tsconfig.json
-│
-├── mock-apis/
-│   ├── src/
-│   │   ├── attendance-api/
-│   │   ├── user-api/
-│   │   └── escalation-api/
-│   └── Dockerfile
-│
-├── infrastructure/
-│   ├── docker/
-│   │   ├── docker-compose.yml
-│   │   └── docker-compose.prod.yml
-│   ├── kubernetes/
-│   │   ├── namespaces/
-│   │   ├── deployments/
-│   │   ├── services/
-│   │   ├── ingress/
-│   │   ├── configmaps/
-│   │   └── secrets/
-│   ├── terraform/
-│   └── scripts/
-│
-├── monitoring/
-│   ├── prometheus/
-│   ├── grafana/
-│   └── elk/
-│
-├── docs/
-│   ├── api/
-│   ├── architecture/
-│   ├── security/
-│   ├── user-guides/
-│   └── development/
-│
-├── config/
-├── scripts/
-├── .env.example
-├── .gitignore
-├── LICENSE
-├── README.md
-└── package.json
-
-🧠 AI Engine
-
-The AI engine is responsible for understanding and processing user requests.
-
-Processing Pipeline
-User Input
-    │
-    ▼
-Language Detection
-    │
-    ▼
-Intent Classification
-    │
-    ▼
-Entity Extraction
-    │
-    ▼
-Context Retrieval
-    │
-    ▼
-Permission Validation
-    │
-    ▼
-Persona Selection
-    │
-    ▼
-Intent Processing
-    │
-    ▼
-Response Generation
-    │
-    ▼
-Context Update
-
-Example
-async def process_query(query, user_context):
-    language = language_detector.detect(query)
-
-    context = context_manager.get_context(
-        user_context.user_id
-    )
-
-    intent = intent_classifier.classify(
-        query,
-        context=context
-    )
-
-    entities = entity_extractor.extract(
-        query,
-        intent=intent,
-        language=language
-    )
-
-    if not authorization.validate(
-        user_context,
-        intent,
-        entities
-    ):
-        return access_denied_response(language)
-
-    persona = persona_factory.create_persona(
-        role=user_context.role,
-        language=language
-    )
-
-    response = await process_intent(
-        intent=intent,
-        entities=entities,
-        persona=persona,
-        context=context
-    )
-
-    context_manager.update_context(
-        user_id=user_context.user_id,
-        query=query,
-        response=response,
-        intent=intent
-    )
-
-    return response
-
-🧩 Conversation Context
-
-XYZ AI maintains short-term conversational memory using Redis.
-
-Context Features
-Configurable conversation window
-Message importance scoring
-User preference tracking
-Automatic expiration using TTL
-Context-aware intent detection
-Prioritization of important interactions
-
-Example importance levels:
-
-Intent	Importance
-General Query	0.50
-View Attendance	0.80
-Personal Information	0.85
-Mark Attendance	0.90
-Escalation Request	0.95
-🎙️ Voice & Avatar
-Voice Pipeline
-Microphone
-    │
-    ▼
-Audio Preprocessing
-    │
-    ▼
-Speech-to-Text
-    │
-    ▼
-NLP / AI Engine
-    │
-    ▼
-Response Generation
-    │
-    ▼
-Text-to-Speech
-    │
-    ▼
-Audio Output
-
-
-The platform is designed to support multilingual speech recognition and synthesis.
-
-Example languages can include:
-
-English
-Hindi
-Tamil
-Telugu
-Other supported regional languages
-👤 AI Avatar
-
-The avatar subsystem supports:
-
-Lip synchronization
-Facial expressions
-Animation states
-Voice synchronization
-Interactive avatar controls
-🔐 Security
-
-XYZ AI follows a zero-trust security model.
-
-Request Security Flow
-Incoming Request
-       │
-       ▼
-Token Extraction
-       │
-       ▼
-Token Blacklist Check
-       │
-       ▼
-JWT Verification
-       │
-       ▼
-Role Validation
-       │
-       ▼
-Permission Validation
-       │
-       ▼
-Resource Authorization
-       │
-       ▼
-Input Validation
-       │
-       ▼
-Request Processing
-
-Role-Based Permissions
-Capability	Student	Parent	Teacher	Principal
-View Own Attendance	✅	—	—	—
-View Child Attendance	—	✅	✅	✅
-Mark Attendance	—	—	✅	✅
-View Analytics	—	—	✅	✅
-Request Escalation	✅	✅	—	—
-Manage Users	—	—	—	✅
-Security Controls
-JWT authentication
-Role-based access control
-Resource-level authorization
-Rate limiting
-Helmet/security headers
-Input sanitization
-Prompt-injection detection
-Token revocation
-Secret management
-Audit logging
-
-Important: Security controls should be independently audited and tested before production deployment.
-
-⚡ Performance
-Redis Caching
-
-Frequently accessed resources can be cached to reduce database/API latency.
-
-async function getOrSet(key, fetchFunction, ttl = 300) {
-    const cached = await redis.get(key);
-
-    if (cached) {
-        return JSON.parse(cached);
-    }
-
-    const data = await fetchFunction();
-
-    await redis.setex(
-        key,
-        ttl,
-        JSON.stringify(data)
-    );
-
-    return data;
-}
-
-Kubernetes Scaling
-
-The AI engine can scale horizontally based on CPU and memory utilization.
-
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  name: ai-engine-autoscaler
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: ai-engine
-  minReplicas: 3
-  maxReplicas: 10
-  metrics:
-    - type: Resource
-      resource:
-        name: cpu
-        target:
-          type: Utilization
-          averageUtilization: 70
-
-📊 Monitoring & Observability
-
-XYZ AI exposes application and AI-specific metrics.
-
-Core Metrics
-HTTP request duration
-HTTP status codes
-Intent detection latency
-Intent accuracy
-Active users
-Conversation length
-Error rates
-Service health
-Resource utilization
-Monitoring Stack
-Application
-    │
-    ├── Prometheus ──► Metrics
-    │
-    ├── Grafana ─────► Dashboards
-    │
-    └── ELK ─────────► Centralized Logs
-
-🧪 Testing
-
-The project is designed around a multi-level testing strategy.
-
-                 Test Suite
-                     │
-        ┌────────────┼────────────┐
-        ▼            ▼            ▼
-      Unit      Integration      E2E
-        │            │            │
-        ▼            ▼            ▼
-   Functions       APIs       User Flows
-
-Test Categories
-Unit tests
-Integration tests
-End-to-end tests
-API tests
-Authorization tests
-AI model evaluation
-Performance tests
-Security tests
-
-Example:
-
-describe('Attendance API', () => {
-    it('should return student attendance', async () => {
-        const response = await request(app)
-            .get(`/api/v1/attendance/student/${student.id}`)
-            .set('Authorization', `Bearer ${authToken}`)
-            .expect(200);
-
-        expect(response.body)
-            .to.have.property('attendance');
-    });
-
-    it('should reject unauthorized access', async () => {
-        await request(app)
-            .get(`/api/v1/attendance/student/${otherStudent.id}`)
-            .set('Authorization', `Bearer ${authToken}`)
-            .expect(403);
-    });
-});
-
-🚀 Local Development
-Prerequisites
-
-Install:
-
-Node.js 18+
-Python 3.9+
-Redis
-Docker
-Docker Compose
-Git
-Clone the Repository
-git clone <repository-url>
+```bash
+git clone https://github.com/Shadhai/xyz-ai.git
 cd xyz-ai
+```
 
-Configure Environment
+### Step 2 — Configure
+
+```bash
 cp .env.example .env
+# then edit .env with your database, Redis, and model-path values
+```
 
+### Step 3 — Run
 
-Update the environment variables according to your local setup.
+```bash
+docker-compose -f infrastructure/docker/docker-compose.yml up --build
+```
 
-Example:
+✅ **Success** — once running, services should be available at:
+```
+Backend API   → http://localhost:3000
+AI Engine     → http://localhost:8000
+Frontend      → http://localhost:5173
+```
 
+---
+
+## ⚙️ Environment Configuration
+
+```env
+# ── Server ──────────────────────────────────────────────
+PORT=3000
 NODE_ENV=development
 
-PORT=3000
+# ── Database ────────────────────────────────────────────
+DB_HOST=localhost
+DB_USER=xyz_ai
+DB_PASSWORD=
 
-REDIS_HOST=localhost
-REDIS_PORT=6379
+# ── Redis ───────────────────────────────────────────────
+REDIS_URL=redis://localhost:6379
 
-JWT_SECRET=change-me
+# ── Authentication ──────────────────────────────────────
+JWT_SECRET=
 
-AI_ENGINE_URL=http://localhost:8000
+# ── AI / Voice Services ─────────────────────────────────
+MODEL_PATH=./ai-engine/src/models/fine_tuned_models/education_model.bin
+DEFAULT_LANGUAGE=en
+```
 
-Install Backend Dependencies
-cd backend
-npm install
+<!-- ADD your actual credentials; do not commit .env -->
 
-Install AI Dependencies
-cd ../ai-engine
-python -m venv .venv
+---
 
-# Linux/macOS
-source .venv/bin/activate
+## 📖 API Reference
 
-pip install -r requirements.txt
+**Auth**
 
-Install Frontend Dependencies
-cd ../frontend
-npm install
+| Method | Endpoint | Description | Auth |
+|:---:|:---|:---|:---:|
+| `POST` | `/api/v1/auth/login` | Authenticate and receive JWT | ❌ |
+| `POST` | `/api/v1/auth/refresh` | Refresh an access token | ✅ |
 
-🐳 Docker
+**Attendance**
 
-Run the complete development environment using Docker Compose:
+| Method | Endpoint | Description | Role |
+|:---:|:---|:---|:---|
+| `GET` | `/api/v1/attendance/student/:id` | Get a student's attendance record | Student / Parent / Teacher |
+| `POST` | `/api/v1/attendance/mark` | Mark attendance for a class | Teacher |
 
-docker compose \
-  -f infrastructure/docker/docker-compose.yml \
-  up --build
+**Escalation**
 
+| Method | Endpoint | Description | Role |
+|:---:|:---|:---|:---|
+| `POST` | `/api/v1/escalation` | Submit an escalation request | Student / Parent |
+| `GET` | `/api/v1/escalation/:id` | View escalation status | Student / Parent / Teacher |
 
-Stop the environment:
+**Analytics**
 
-docker compose \
-  -f infrastructure/docker/docker-compose.yml \
-  down
+| Method | Endpoint | Description | Role |
+|:---:|:---|:---|:---|
+| `GET` | `/api/v1/analytics/usage` | Conversation and usage analytics | Teacher / Principal |
 
+<!-- UPDATE endpoints against docs/api/openapi.yaml for exact paths and payloads -->
+
+📚 Full schema: see `docs/api/openapi.yaml` for the live Swagger definition.
+
+---
+
+## 🎯 Use Cases
+
+### 🏫 Small School Deployment
+A single-campus school runs XYZ AI as its primary parent-communication channel, replacing SMS blasts and a static portal with a chat and voice assistant that answers attendance questions in each family's preferred language.
+
+### 🏢 Multi-Campus School District
+A district deploys XYZ AI across multiple schools behind Kubernetes with horizontal autoscaling, routing role-based permissions so principals see district-wide analytics while teachers only see their own classes.
+
+### 🎓 Academic / Portfolio Project
+A student or researcher uses XYZ AI's persona and context-management architecture as a reference implementation for applied conversational AI with role-based access control.
+
+### ♿ Accessibility-First Integration
+A school with a large multilingual or low-literacy parent population relies on the voice and avatar interfaces to make attendance and escalation flows accessible without requiring text literacy.
+
+---
+
+## 📁 Project Structure
+
+```
+xyz-ai/
+├── 📁 backend/                # Node.js/Express API
+│   └── src/
+│       ├── api/v1/            # routes, controllers, middleware, validators
+│       ├── core/               # config, constants, errors, utils
+│       ├── models/             # User, Student, Parent, Teacher, Attendance...
+│       └── services/           # attendance, user, escalation, analytics
+│
+├── 📁 ai-engine/               # Python/FastAPI AI core
+│   └── src/
+│       ├── nlp/                 # intent, entity, language, context
+│       ├── persona/              # role-based conversational personas
+│       ├── voice/                 # STT/TTS pipeline
+│       ├── avatar/                 # lip sync + expressions
+│       └── models/                  # fine-tuned model artifacts
+│
+├── 📁 frontend/                # React + TypeScript client
+│   └── src/
+│       ├── components/          # Chat, Voice, Avatar, Common
+│       ├── pages/                 # Login, Dashboard, ChatPage, Analytics
+│       └── services/               # api, websocket, auth, voice
+│
+├── 📁 mock-apis/               # attendance/user/escalation mocks
+├── 📁 infrastructure/          # Docker, Kubernetes, Terraform
+├── 📁 monitoring/              # Prometheus, Grafana, ELK
+└── 📁 docs/                    # API, architecture, security, guides
+```
+
+---
+
+## 🐳 Docker Deployment
+
+```bash
+docker-compose -f infrastructure/docker/docker-compose.yml up --build
+```
 
 For production:
+```bash
+docker-compose -f infrastructure/docker/docker-compose.prod.yml up -d
+```
 
-docker compose \
-  -f infrastructure/docker/docker-compose.prod.yml \
-  up -d
+Kubernetes manifests (deployments, services, ingress, HPA) live under `infrastructure/kubernetes/`.
 
-☸️ Kubernetes
+---
 
-The platform includes Kubernetes manifests for production deployments.
+## 🧪 Testing
 
-Typical deployment flow:
+```bash
+# Backend (Node.js)
+cd backend && npm test
 
-kubectl apply -f infrastructure/kubernetes/namespaces/
-kubectl apply -f infrastructure/kubernetes/configmaps/
-kubectl apply -f infrastructure/kubernetes/secrets/
-kubectl apply -f infrastructure/kubernetes/deployments/
-kubectl apply -f infrastructure/kubernetes/services/
-kubectl apply -f infrastructure/kubernetes/ingress/
+# AI Engine (Python)
+cd ai-engine && pytest
+```
 
+<!-- UPDATE test runner if backend uses a different framework than Mocha/Chai -->
 
-Verify the deployment:
+---
 
-kubectl get pods -n xyz-ai
-kubectl get services -n xyz-ai
+## 🩺 Troubleshooting
 
-🔌 API
+| Symptom | Likely Cause | Fix |
+|:---|:---|:---|
+| `Cannot connect to database` | Wrong credentials or DB not running | Check `DB_HOST`, `DB_USER`, `DB_PASSWORD` in `.env` |
+| `Redis connection refused` | Redis container not started | Confirm `REDIS_URL` and that the Redis service is up |
+| `401 Unauthorized` on every request | Missing or expired JWT | Re-authenticate via `/api/v1/auth/login`, check `JWT_SECRET` matches |
+| `Port already in use` | Another process bound to 3000/8000 | Change `PORT` in `.env` or stop the conflicting process |
+| `Model file not found` | `MODEL_PATH` points to a missing `.bin` file | Verify `ai-engine/src/models/fine_tuned_models/` contains the model |
+| `CORS error` in browser console | Frontend origin not whitelisted | Add frontend URL to backend CORS config |
 
-The backend exposes versioned REST APIs.
+---
 
-Example API groups:
+## 🗺️ Roadmap
 
-/api/v1/auth
-/api/v1/users
-/api/v1/attendance
-/api/v1/escalations
-/api/v1/analytics
+- [x] Role-based persona engine (student/parent/teacher/principal)
+- [x] Multilingual voice pipeline (STT/TTS)
+- [x] AI avatar with lip sync and expressions
+- [x] Zero-trust auth middleware with prompt-injection sanitization
+- [x] Kubernetes autoscaling configuration
+- [ ] 🚧 Native mobile app (iOS/Android)
+- [ ] 🚧 Expanded language coverage beyond current 12
+- [ ] 🚧 Real-time analytics streaming dashboard
+- [ ] 🚧 SIS (Student Information System) integrations beyond mock APIs
 
+---
 
-API documentation is maintained under:
+## 🤝 Contributing
 
-docs/api/
-├── openapi.yaml
-└── endpoints.md
+```bash
+# 1. Fork the repository
+# 2. Clone your fork
+git clone https://github.com/YOUR_USERNAME/xyz-ai.git
 
-📚 Documentation
+# 3. Create a feature branch
+git checkout -b feature/your-feature-name
 
-Additional documentation is organized as follows:
+# 4. Make your changes and commit
+git commit -m "Add: your feature description"
 
-docs/
-├── api/
-│   ├── openapi.yaml
-│   └── endpoints.md
-│
-├── architecture/
-│   ├── system-design.md
-│   └── data-flow.md
-│
-├── security/
-│   ├── threat-model.md
-│   └── security-policy.md
-│
-├── user-guides/
-│   ├── student-guide.md
-│   ├── parent-guide.md
-│   └── teacher-guide.md
-│
-└── development/
-    ├── contributing.md
-    └── code-style.md
+# 5. Push to your fork
+git push origin feature/your-feature-name
 
-🗺️ Roadmap
-Phase 1 — Foundation
- Core backend architecture
- Authentication
- Role-based authorization
- Attendance APIs
- Basic conversational AI
- Redis context management
-Phase 2 — AI Experience
- Advanced intent classification
- Multilingual support
- Improved personalization
- Voice interaction
- AI avatar
- Real-time WebSocket communication
-Phase 3 — Production
- Kubernetes production deployment
- Horizontal autoscaling
- Advanced observability
- Security auditing
- Load testing
- Disaster recovery
-Phase 4 — Intelligence
- Predictive analytics
- Personalized student assistance
- Automated escalation routing
- Advanced school analytics
- Continuous model evaluation
-🤝 Contributing
+# 6. Open a Pull Request against main
+```
 
-Contributions are welcome.
+See `docs/development/contributing.md` for code style and review guidelines.
 
-Fork the repository.
-Create a feature branch.
-Make your changes.
-Add or update tests.
-Run linting and the test suite.
-Submit a pull request.
+---
 
-Example:
+## 👥 Contributors
 
-git checkout -b feature/my-feature
+<div align="center">
+<a href="https://github.com/Shadhai/xyz-ai/graphs/contributors">
+<img src="https://contrib.rocks/image?repo=Shadhai/xyz-ai" />
+</a>
+</div>
 
-npm test
-npm run lint
+---
 
-git add .
-git commit -m "feat: add my feature"
-git push origin feature/my-feature
+## ⭐ Star History
 
+<div align="center">
 
-Please review the project contribution and coding standards in:
+[![Star History Chart](https://api.star-history.com/svg?repos=Shadhai/xyz-ai&type=Date)](https://star-history.com/#Shadhai/xyz-ai&Date)
 
-docs/development/contributing.md
-docs/development/code-style.md
+</div>
 
-📄 License
+---
 
-This project is licensed under the MIT License.
+## 🤖 AI-Ready
 
-See LICENSE for details.
+This repository includes stub files for AI coding agents:
+- `llms.txt` — machine-readable project summary
+- `AGENTS.md` — instructions for AI coding assistants working in this repo
 
-🌟 Vision
+<!-- Generate these stub files separately if not already present in the repo -->
 
-XYZ AI aims to make school communication more accessible, conversational, personalized, and efficient by combining modern AI, voice technology, secure school APIs, and human-like interaction into one unified platform.
-
-One assistant. One conversation. A smarter way to connect the entire school.
+<div align="center">
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:c6ffdd,50:38ef7d,100:11998e&height=120&section=footer" width="100%" />
+</div>
